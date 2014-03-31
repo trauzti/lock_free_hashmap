@@ -1,4 +1,4 @@
-CFLAGS= -ggdb3 -pg -O3 -std=c++11 -levent -lpthread # -ljemalloc
+CFLAGS= -ggdb3 -O3 -std=c++11 -levent -lpthread # -ljemalloc
 #CFLAGS="-pg"
 
 target: all
