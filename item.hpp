@@ -16,8 +16,8 @@ public:
   item(const char *_key, const char *_value) {
     nkey = strlen(_key);
     int nval = strlen(_value);
-    key = (char *) calloc(1, nkey);
-    value = (char *) calloc(1, nval);
+    key = (char *) calloc(1, nkey + 1);
+    value = (char *) calloc(1, nval + 1);
     memcpy(key, _key, nkey);
     memcpy(value, _value, nval);
     assert (_key[nkey] == '\0');
