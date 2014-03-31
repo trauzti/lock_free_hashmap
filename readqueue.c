@@ -69,7 +69,7 @@ int readqueue_init(readqueue_t *readqueue, int numWorkers) {
 	memcpy(&readqueue->jobs_cond, &blank_cond, sizeof(readqueue->jobs_cond));
 
 	for (i = 0; i < numWorkers; i++) {
-		if ((worker = malloc(sizeof(worker_t))) == NULL) {
+		if ((worker = (worker_t *) malloc(sizeof(worker_t))) == NULL) {
 			perror("Failed to allocate all workers");
 			return 1;
 		}
