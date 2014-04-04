@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include <time.h>
+#include <atomic>
 #include "gc.h"
 
 struct garbage_item *garbage_head = 0;
@@ -13,8 +14,19 @@ struct garbage_item *candidate_curr = 0;
 pthread_mutex_t swap_mutex;
 int stop=0;
 
+void print_list() 
+{
+	struct garbage_item* ptr=candidate_head;
+	while (ptr) {
+		printf(".");
+		ptr=ptr->next;
+	}
+	printf("\n");
+}
+
 struct garbage_item* add_garbage(void *victim)
 {
+	printf("+");
 	struct garbage_item *ptr;
 	ptr = (struct garbage_item *)malloc(sizeof(struct garbage_item));	
 	if(NULL == ptr)
@@ -25,12 +37,9 @@ struct garbage_item* add_garbage(void *victim)
 	ptr->victim = victim;
 	ptr->next = 0;
 
-	
-
-	
 	if(candidate_head == 0)
 	{
-		struct garbage_item *my_candidate_curr
+		struct garbage_item *my_candidate_curr;
 		__sync_bool_compare_and_swap(&candidate_head,0,ptr);
 		bool exchanged = __sync_bool_compare_and_swap(&candidate_curr,0,ptr);
 		if (!exchanged) {
@@ -57,6 +66,7 @@ struct garbage_item* add_garbage(void *victim)
 		}
 		my_candidate_curr->next = ptr;
 	}
+	print_list();
 	
 	return candidate_curr;
 }

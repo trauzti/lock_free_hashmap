@@ -1,4 +1,4 @@
-CFLAGS= -ggdb3 -O3 -std=c++11 -levent -lpthread # -ljemalloc
+CFLAGS= -ggdb3 -O3 -std=c++0x -levent -pthread -lpthread # -ljemalloc
 #CFLAGS="-pg"
 
 target: all
@@ -18,11 +18,14 @@ readqueue.o: readqueue.c
 hash.o: hash.cpp
 	g++ $(CFLAGS) -c hash.cpp 
 
+gc.o: gc.cc gc.h
+	g++ $(CFLAGS) -c gc.cc
+
 lock_free_hashtable.o: lock_free_hashtable.cc 
 	g++ $(CFLAGS) -c $^
 
-test_lock_free_hashmap: lock_free_hashtable.o hash.o
-	g++ $(CFLAGS)  test_lock_free_hashmap.cpp lock_free_hashtable.o hash.o -o $@
+test_lock_free_hashmap: lock_free_hashtable.o hash.o gc.o
+	g++ $(CFLAGS)  test_lock_free_hashmap.cpp $^ -o $@
 
 .PHONY: clean
 clean:
